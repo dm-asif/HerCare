@@ -1,0 +1,6 @@
+{
+  "name": "HerCare",
+  "description": "Functional women's health app featuring period tracking, cycle irregularity warnings, medicine routines, vaginal discharge guide, pad stock tracker, biometric privacy, and reliable Android local notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
