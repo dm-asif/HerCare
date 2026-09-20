@@ -26,20 +26,22 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Accept Android SDK Licenses
+      - name: Install Android Build-Tools & Platforms
         run: |
           yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" || true
 
-      - name: Prepare Keystore and Environment
+      - name: Prepare Keystore and Environment Files
         run: |
-          # 1. Restore or generate debug.keystore required by debugConfig
+          # 1. Generate or restore debug.keystore for signingConfig
           if [ -f debug.keystore.base64 ]; then
             base64 -d debug.keystore.base64 > debug.keystore
-          elif [ ! -f debug.keystore ]; then
+          fi
+          if [ ! -f debug.keystore ]; then
             keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
 
-          # 2. Ensure .env exists for Secrets Gradle Plugin
+          # 2. Ensure .env exists so Secrets Gradle Plugin doesn't fail
           if [ ! -f .env ]; then
             if [ -f .env.example ]; then
               cp .env.example .env
@@ -48,11 +50,8 @@ jobs:
             fi
           fi
 
-      - name: Grant Execute Permission for Gradlew
-        run: |
-          if [ -f gradlew ]; then
-            chmod +x gradlew
-          fi
+          # 3. Ensure gradlew is executable
+          chmod +x gradlew
 
       - name: Build Debug APK
         run: |
@@ -60,6 +59,7 @@ jobs:
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: HerCare-Debug-APK
           path: app/build/outputs/apk/debug/*.apk
