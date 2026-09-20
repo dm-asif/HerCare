@@ -2,58 +2,108 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// HerCare Brand Colors (Teal, Mint, Emerald, Soft Sage & Coral Accents)
-val TealPrimary = Color(0xFF005B54)
-val TealOnPrimary = Color(0xFFFFFFFF)
-val TealPrimaryContainer = Color(0xFFD4EBE7)
-val TealOnPrimaryContainer = Color(0xFF00201D)
+// HerCare Exact Color System (Mandated by Design Specifications)
+val PrimaryPink = Color(0xFFE91E63)          // Primary brand color
+val DeepPink = Color(0xFFC2185B)             // Deep Pink / Magenta accents
+val RoseAccent = Color(0xFFEC407A)           // Rose
+val SoftPink = Color(0xFFF8BBD0)             // Soft Pink borders and highlights
+val LightPink = Color(0xFFFCE4EC)            // Light Pink chips, badges, containers
+val VeryLightBackground = Color(0xFFFFF7FA)  // Very Light Background
+val PureWhite = Color(0xFFFFFFFF)            // Pure White cards and surfaces
+val PrimaryText = Color(0xFF35152B)          // Deep plum primary text
+val SecondaryText = Color(0xFF76586C)        // Soft plum secondary text
+val SoftPurpleAccent = Color(0xFF9C6BB7)     // Soft purple accent
+val SuccessGreen = Color(0xFF4CAF7A)         // Success
+val WarningAmber = Color(0xFFF2A93B)         // Warning
+val DangerRed = Color(0xFFE53935)            // Danger
 
-val EmeraldSecondary = Color(0xFF00796B)
-val EmeraldOnSecondary = Color(0xFFFFFFFF)
-val EmeraldSecondaryContainer = Color(0xFFC7EFE9)
-val EmeraldOnSecondaryContainer = Color(0xFF00201B)
+// Aliases and UI Surface Tokens
+val AppBackground = VeryLightBackground
+val CardBackground = PureWhite
+val CardBorderColor = Color(0xFFFFDFEA)
+val CardSoftShadowColor = Color(0x1AD81B60)
+val GlassmorphicCard = Color(0xCCFFFFFF)
+val GlassmorphicBorder = Color(0x66F8BBD0)
 
-val MintTertiary = Color(0xFF26A69A)
-val MintOnTertiary = Color(0xFFFFFFFF)
-val MintTertiaryContainer = Color(0xFFE0F2F1)
-val MintOnTertiaryContainer = Color(0xFF003833)
+// Gradients
+val HeroGradientStart = Color(0xFFFFF0F5)
+val HeroGradientEnd = Color(0xFFFFDFEC)
+val PillGradientStart = Color(0xFFEC407A)
+val PillGradientEnd = Color(0xFFC2185B)
 
-// Period & Health Status Accents
-val CoralPeriod = Color(0xFFE53935)
-val RosePeriod = Color(0xFFE91E63)
-val SoftPinkPeriod = Color(0xFFFFEBEE)
-val WarningRed = Color(0xFFD32F2F)
+// Backward Compatibility Aliases
+val SoftRose = RoseAccent
+val VeryLightPink = VeryLightBackground
+val AccentPurple = SoftPurpleAccent
+val WarningRed = DangerRed
 val WarningRedContainer = Color(0xFFFFEBEE)
-val FertileGreen = Color(0xFF2E7D32)
-val FertileGreenContainer = Color(0xFFE8F5E9)
+val FertileGreen = SuccessGreen
+val FertileGreenContainer = Color(0xFFE8F8F0)
+val CoralPeriod = DangerRed
+val RosePeriod = PrimaryPink
+val SoftPinkPeriod = LightPink
 
-// Surfaces and Backgrounds
-val NeutralBackground = Color(0xFFF7FAF9)
-val NeutralSurface = Color(0xFFFFFFFF)
-val NeutralSurfaceVariant = Color(0xFFEDF3F1)
-val NeutralOnSurface = Color(0xFF191C1C)
-val NeutralOnSurfaceVariant = Color(0xFF3F4947)
-val NeutralOutline = Color(0xFF6F7977)
+val PinkPrimary = PrimaryPink
+val PinkOnPrimary = PureWhite
+val PinkPrimaryContainer = LightPink
+val PinkOnPrimaryContainer = DeepPink
 
-// Dark Theme Colors
-val TealPrimaryDark = Color(0xFF4DD0C4)
-val TealOnPrimaryDark = Color(0xFF003732)
-val TealPrimaryContainerDark = Color(0xFF004F49)
-val TealOnPrimaryContainerDark = Color(0xFFD4EBE7)
+val RoseSecondary = RoseAccent
+val RoseOnSecondary = PureWhite
+val RoseSecondaryContainer = LightPink
+val RoseOnSecondaryContainer = PrimaryText
 
-val EmeraldSecondaryDark = Color(0xFF80CBC4)
-val EmeraldOnSecondaryDark = Color(0xFF003831)
-val EmeraldSecondaryContainerDark = Color(0xFF004F46)
-val EmeraldOnSecondaryContainerDark = Color(0xFFC7EFE9)
+val LilacTertiary = SoftPurpleAccent
+val LilacOnTertiary = PureWhite
+val LilacTertiaryContainer = Color(0xFFF6EEFA)
+val LilacOnTertiaryContainer = PrimaryText
 
-val MintTertiaryDark = Color(0xFF82D5C9)
-val MintOnTertiaryDark = Color(0xFF003833)
-val MintTertiaryContainerDark = Color(0xFF005049)
-val MintOnTertiaryContainerDark = Color(0xFFE0F2F1)
+val TealPrimary = PinkPrimary
+val TealOnPrimary = PinkOnPrimary
+val TealPrimaryContainer = PinkPrimaryContainer
+val TealOnPrimaryContainer = PinkOnPrimaryContainer
 
-val NeutralBackgroundDark = Color(0xFF101514)
-val NeutralSurfaceDark = Color(0xFF181E1D)
-val NeutralSurfaceVariantDark = Color(0xFF232A29)
-val NeutralOnSurfaceDark = Color(0xFFE1E3E2)
-val NeutralOnSurfaceVariantDark = Color(0xFFBFC9C7)
-val NeutralOutlineDark = Color(0xFF899391)
+val EmeraldSecondary = RoseSecondary
+val EmeraldOnSecondary = RoseOnSecondary
+val EmeraldSecondaryContainer = RoseSecondaryContainer
+val EmeraldOnSecondaryContainer = RoseOnSecondaryContainer
+
+val MintTertiary = LilacTertiary
+val MintOnTertiary = LilacOnTertiary
+val MintTertiaryContainer = LilacTertiaryContainer
+val MintOnTertiaryContainer = LilacOnTertiaryContainer
+
+val NeutralBackground = AppBackground
+val NeutralSurface = CardBackground
+val NeutralSurfaceVariant = LightPink
+val NeutralOnSurface = PrimaryText
+val NeutralOnSurfaceVariant = SecondaryText
+val NeutralOutline = CardBorderColor
+
+val DarkTextPrimary = PrimaryText
+val DarkTextSecondary = SecondaryText
+
+// Dark theme is intentionally mapped to a high-contrast elegant light rose-plum palette
+val PinkPrimaryDark = PrimaryPink
+val PinkOnPrimaryDark = PureWhite
+val PinkPrimaryContainerDark = LightPink
+val PinkOnPrimaryContainerDark = DeepPink
+
+val RoseSecondaryDark = RoseAccent
+val RoseOnSecondaryDark = PureWhite
+val RoseSecondaryContainerDark = LightPink
+val RoseOnSecondaryContainerDark = PrimaryText
+
+val LilacTertiaryDark = SoftPurpleAccent
+val LilacOnTertiaryDark = PureWhite
+val LilacTertiaryContainerDark = Color(0xFFF6EEFA)
+val LilacOnTertiaryContainerDark = PrimaryText
+
+val NeutralBackgroundDark = VeryLightBackground
+val NeutralSurfaceDark = PureWhite
+val NeutralSurfaceVariantDark = LightPink
+val NeutralOnSurfaceDark = PrimaryText
+val NeutralOnSurfaceVariantDark = SecondaryText
+val NeutralOutlineDark = CardBorderColor
+
+

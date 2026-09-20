@@ -630,6 +630,26 @@ object HerCareStrings {
         AppLanguage.BANGLA -> "সেটিংস ও নিরাপত্তা"
     }
 
+    fun personalInfoTitle(lang: AppLanguage) = when (lang) {
+        AppLanguage.ENGLISH -> "Personal Information"
+        AppLanguage.BANGLA -> "ব্যক্তিগত তথ্য"
+    }
+
+    fun personalInfoSubtitle(lang: AppLanguage) = when (lang) {
+        AppLanguage.ENGLISH -> "Name and date of birth used for your cycle health profile"
+        AppLanguage.BANGLA -> "আপনার সাইকেল স্বাস্থ্য প্রোফাইলের নাম ও জন্ম তারিখ"
+    }
+
+    fun editPersonalInfo(lang: AppLanguage) = when (lang) {
+        AppLanguage.ENGLISH -> "Edit Information"
+        AppLanguage.BANGLA -> "তথ্য পরিবর্তন করুন"
+    }
+
+    fun savedSuccessfully(lang: AppLanguage) = when (lang) {
+        AppLanguage.ENGLISH -> "Changes saved successfully"
+        AppLanguage.BANGLA -> "সফলভাবে সংরক্ষিত হয়েছে"
+    }
+
     fun languagePreference(lang: AppLanguage) = when (lang) {
         AppLanguage.ENGLISH -> "App Language / ভাষা"
         AppLanguage.BANGLA -> "অ্যাপের ভাষা (Language)"

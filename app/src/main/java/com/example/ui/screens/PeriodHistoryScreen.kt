@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -63,6 +65,17 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.draw.shadow
+import com.example.ui.theme.CardBorderColor
+import com.example.ui.theme.CardSoftShadowColor
+import com.example.ui.theme.DeepPink
+import com.example.ui.theme.LightPink
+import com.example.ui.theme.PrimaryPink
+import com.example.ui.theme.PrimaryText
+import com.example.ui.theme.SecondaryText
+import com.example.ui.theme.SoftRose
 
 @Composable
 fun PeriodHistoryScreen(
@@ -113,12 +126,12 @@ fun PeriodHistoryScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -127,18 +140,21 @@ fun PeriodHistoryScreen(
                 Column {
                     Text(
                         text = if (language == AppLanguage.BANGLA) "পিরিয়ড ট্র্যাকিং ও ইতিহাস" else "Period Tracking & History",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = (-0.3).sp
+                        ),
+                        color = DeepPink
                     )
                     Text(
                         text = if (language == AppLanguage.BANGLA) "পূর্ববর্তী চক্রসমূহ ও ক্যালেন্ডার" else "Past cycles, flow logs & predictions",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = SecondaryText
                     )
                 }
 
                 // Add Historical Period Button
-                OutlinedButton(
+                Button(
                     onClick = {
                         val cal = Calendar.getInstance()
                         DatePickerDialog(
@@ -155,12 +171,18 @@ fun PeriodHistoryScreen(
                             cal.get(Calendar.DAY_OF_MONTH)
                         ).show()
                     },
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = DeepPink),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                     modifier = Modifier.testTag("add_historical_period_button")
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Period", modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Add, contentDescription = "Add Period", modifier = Modifier.size(16.dp), tint = Color.White)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(if (language == AppLanguage.BANGLA) "যুক্ত করুন" else "+ Period")
+                    Text(
+                        text = if (language == AppLanguage.BANGLA) "যুক্ত করুন" else "+ Period",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -168,10 +190,12 @@ fun PeriodHistoryScreen(
         // Interactive Monthly Calendar Card
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, CardBorderColor)
             ) {
                 Column(
                     modifier = Modifier
@@ -184,22 +208,34 @@ fun PeriodHistoryScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { calendarMonthOffset-- }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous Month")
+                        IconButton(
+                            onClick = { calendarMonthOffset-- },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(LightPink)
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous Month", tint = DeepPink, modifier = Modifier.size(18.dp))
                         }
 
                         Text(
                             text = monthYearText,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                            color = DeepPink
                         )
 
-                        IconButton(onClick = { calendarMonthOffset++ }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next Month")
+                        IconButton(
+                            onClick = { calendarMonthOffset++ },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(LightPink)
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next Month", tint = DeepPink, modifier = Modifier.size(18.dp))
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     // Days of Week Header
                     val weekDays = if (language == AppLanguage.BANGLA) {
@@ -216,7 +252,7 @@ fun PeriodHistoryScreen(
                             Text(
                                 text = dayName,
                                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = SecondaryText,
                                 modifier = Modifier.width(36.dp),
                                 textAlign = TextAlign.Center
                             )
@@ -339,8 +375,8 @@ fun PeriodHistoryScreen(
         item {
             Text(
                 text = if (language == AppLanguage.BANGLA) "সম্পূর্ণ পিরিয়ড ইতিহাস" else "Complete Period History",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                color = DeepPink,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
@@ -348,14 +384,17 @@ fun PeriodHistoryScreen(
         if (uiState.periods.isEmpty()) {
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(elevation = 1.dp, shape = RoundedCornerShape(18.dp), spotColor = CardSoftShadowColor),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = BorderStroke(1.dp, CardBorderColor)
                 ) {
                     Text(
                         text = if (language == AppLanguage.BANGLA) "কোনো পিরিয়ডের তথ্য এখনো সংরক্ষিত নেই।" else "No period records found yet. Tap '+ Period' to add.",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = SecondaryText,
                         modifier = Modifier.padding(20.dp),
                         textAlign = TextAlign.Center
                     )
@@ -369,9 +408,12 @@ fun PeriodHistoryScreen(
                 } ?: uiState.userProfile.periodDurationDays
 
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(elevation = 1.dp, shape = RoundedCornerShape(18.dp), spotColor = CardSoftShadowColor),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = BorderStroke(1.dp, CardBorderColor)
                 ) {
                     Row(
                         modifier = Modifier
@@ -385,13 +427,13 @@ fun PeriodHistoryScreen(
                                 modifier = Modifier
                                     .size(42.dp)
                                     .clip(CircleShape)
-                                    .background(CoralPeriod.copy(alpha = 0.15f)),
+                                    .background(LightPink),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.WaterDrop,
                                     contentDescription = "Period",
-                                    tint = CoralPeriod,
+                                    tint = DeepPink,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -402,12 +444,16 @@ fun PeriodHistoryScreen(
                                 Text(
                                     text = dateFormat.format(Date(period.startDateMillis)) +
                                             if (period.endDateMillis != null) " - ${dateFormat.format(Date(period.endDateMillis))}" else " (Active)",
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp
+                                    ),
+                                    color = PrimaryText
                                 )
                                 Text(
                                     text = if (language == AppLanguage.BANGLA) "স্থায়িত্বকাল: $durationDays দিন • তীব্রতা: ${period.flowIntensity}" else "Duration: $durationDays days • Flow: ${period.flowIntensity}",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                                    color = SecondaryText
                                 )
                             }
                         }
@@ -416,7 +462,7 @@ fun PeriodHistoryScreen(
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete record",
-                                tint = MaterialTheme.colorScheme.outline
+                                tint = SecondaryText
                             )
                         }
                     }

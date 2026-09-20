@@ -30,7 +30,8 @@ data class HerCareUiState(
     val medicines: List<MedicineEntry> = emptyList(),
     val padStock: PadStock = PadStock(),
     val isAppLocked: Boolean = false,
-    val isOnboardingComplete: Boolean = false
+    val isOnboardingComplete: Boolean = false,
+    val isLoaded: Boolean = false
 )
 
 class HerCareViewModel(application: Application) : AndroidViewModel(application) {
@@ -115,12 +116,13 @@ class HerCareViewModel(application: Application) : AndroidViewModel(application)
             medicines = inv.medicines,
             padStock = inv.padStock ?: PadStock(),
             isAppLocked = inv.isLocked && user.isBiometricEnabled,
-            isOnboardingComplete = user.onboardingCompleted
+            isOnboardingComplete = user.onboardingCompleted,
+            isLoaded = true
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = HerCareUiState()
+        initialValue = HerCareUiState(isLoaded = false)
     )
 
     init {
@@ -137,6 +139,18 @@ class HerCareViewModel(application: Application) : AndroidViewModel(application)
 
     fun unlockApp() {
         _isAppLocked.value = false
+    }
+
+    fun updatePersonalInfo(name: String, birthDateMillis: Long) {
+        viewModelScope.launch {
+            val current = repository.getUserProfileOnce() ?: UserProfile()
+            repository.saveUserProfile(
+                current.copy(
+                    name = name,
+                    birthDateMillis = birthDateMillis
+                )
+            )
+        }
     }
 
     fun setLanguage(lang: AppLanguage) {

@@ -46,6 +46,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -76,6 +77,18 @@ import com.example.ui.theme.WarningRedContainer
 import com.example.ui.viewmodel.HerCareUiState
 import java.util.Calendar
 import java.util.Locale
+
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.ui.draw.shadow
+import com.example.ui.theme.CardBorderColor
+import com.example.ui.theme.CardSoftShadowColor
+import com.example.ui.theme.DeepPink
+import com.example.ui.theme.LightPink
+import com.example.ui.theme.PrimaryPink
+import com.example.ui.theme.PrimaryText
+import com.example.ui.theme.SecondaryText
+import com.example.ui.theme.SoftRose
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -111,14 +124,30 @@ fun MedicineAndStockScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
     ) {
         // Tab Row: Medicines vs Pads
-        TabRow(
-            selectedTabIndex = selectedTab,
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.primary
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .shadow(elevation = 2.dp, shape = RoundedCornerShape(16.dp), spotColor = CardSoftShadowColor),
+            shape = RoundedCornerShape(16.dp),
+            color = Color.White.copy(alpha = 0.95f),
+            border = BorderStroke(1.dp, CardBorderColor)
         ) {
+            TabRow(
+                selectedTabIndex = selectedTab,
+                containerColor = Color.Transparent,
+                contentColor = DeepPink,
+                indicator = { tabPositions ->
+                    TabRowDefaults.SecondaryIndicator(
+                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                        color = DeepPink
+                    )
+                },
+                divider = {}
+            ) {
             Tab(
                 selected = selectedTab == 0,
                 onClick = { selectedTab = 0 },
@@ -128,7 +157,8 @@ fun MedicineAndStockScreen(
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = HerCareStrings.medicineRoutineTab(language),
-                            fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Normal,
+                            fontWeight = if (selectedTab == 0) FontWeight.ExtraBold else FontWeight.Normal,
+                            color = if (selectedTab == 0) DeepPink else SecondaryText,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -145,7 +175,8 @@ fun MedicineAndStockScreen(
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = HerCareStrings.padStockTrackerTab(language),
-                            fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Normal,
+                            fontWeight = if (selectedTab == 1) FontWeight.ExtraBold else FontWeight.Normal,
+                            color = if (selectedTab == 1) DeepPink else SecondaryText,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -153,6 +184,7 @@ fun MedicineAndStockScreen(
                 },
                 modifier = Modifier.testTag("pad_stock_tab")
             )
+        }
         }
 
         if (selectedTab == 0) {
@@ -173,30 +205,36 @@ fun MedicineAndStockScreen(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = HerCareStrings.medicineTitle(language),
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.primary
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontWeight = FontWeight.ExtraBold,
+                                    letterSpacing = (-0.3).sp
+                                ),
+                                color = DeepPink
                             )
                             Text(
                                 text = if (language == AppLanguage.BANGLA) "ওষুধের সময়সূচী ও নির্ভরযোগ্য রিমাইন্ডার" else "Prescription schedule & persistent reminders",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = SecondaryText
                             )
                         }
 
                         Button(
                             onClick = { showAddMedicineDialog = true },
-                            shape = RoundedCornerShape(12.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = DeepPink),
+                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
                             modifier = Modifier
                                 .height(44.dp)
                                 .testTag("add_medicine_button")
                         ) {
-                            Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(16.dp))
+                            Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(16.dp), tint = Color.White)
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = HerCareStrings.addMedicine(language),
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                             )
                         }
                     }
@@ -205,25 +243,36 @@ fun MedicineAndStockScreen(
                 // Mandatory Non-Prescription Medical Disclaimer
                 item {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(elevation = 1.dp, shape = RoundedCornerShape(16.dp), spotColor = CardSoftShadowColor),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, CardBorderColor)
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(14.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                Icons.Default.Info,
-                                contentDescription = "Disclaimer",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(LightPink),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Info,
+                                    contentDescription = "Disclaimer",
+                                    tint = DeepPink,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = HerCareStrings.medicineDisclaimer(language),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = SecondaryText,
                                 lineHeight = 16.sp
                             )
                         }
@@ -234,14 +283,17 @@ fun MedicineAndStockScreen(
                 if (uiState.medicines.isEmpty()) {
                     item {
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 1.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            border = BorderStroke(1.dp, CardBorderColor)
                         ) {
                             Text(
                                 text = if (language == AppLanguage.BANGLA) "কোনো ওষুধ যুক্ত করা হয়নি। নতুন ওষুধ যোগ করতে উপরের বোতামে চাপুন।" else "No medicines added yet. Tap '+ Add Medicine' to schedule reminders.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = SecondaryText,
                                 modifier = Modifier.padding(24.dp),
                                 textAlign = TextAlign.Center
                             )
@@ -260,10 +312,12 @@ fun MedicineAndStockScreen(
                         }
 
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            border = BorderStroke(1.dp, CardBorderColor)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -284,16 +338,17 @@ fun MedicineAndStockScreen(
                                                 .size(42.dp)
                                                 .clip(CircleShape)
                                                 .background(
-                                                    if (isFullyTakenToday) MaterialTheme.colorScheme.secondaryContainer
-                                                    else MaterialTheme.colorScheme.primaryContainer
+                                                    if (isFullyTakenToday) Color(0xFFE8F5E9)
+                                                    else LightPink
                                                 ),
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Icon(
                                                 imageVector = if (isFullyTakenToday) Icons.Default.Check else Icons.Default.LocalPharmacy,
                                                 contentDescription = "Med",
-                                                tint = if (isFullyTakenToday) MaterialTheme.colorScheme.onSecondaryContainer
-                                                else MaterialTheme.colorScheme.primary
+                                                tint = if (isFullyTakenToday) Color(0xFF2E7D32)
+                                                else DeepPink,
+                                                modifier = Modifier.size(20.dp)
                                             )
                                         }
 
@@ -302,12 +357,16 @@ fun MedicineAndStockScreen(
                                         Column {
                                             Text(
                                                 text = med.name,
-                                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                                                style = MaterialTheme.typography.titleMedium.copy(
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 15.sp
+                                                ),
+                                                color = PrimaryText
                                             )
                                             Text(
                                                 text = "${HerCareStrings.medicineDose(language)}: ${med.dose} • $mealLabel",
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                                                color = SecondaryText
                                             )
                                         }
                                     }
@@ -319,7 +378,7 @@ fun MedicineAndStockScreen(
                                         Icon(
                                             Icons.Default.Delete,
                                             contentDescription = "Delete",
-                                            tint = MaterialTheme.colorScheme.outline
+                                            tint = SecondaryText.copy(alpha = 0.6f)
                                         )
                                     }
                                 }
@@ -329,8 +388,11 @@ fun MedicineAndStockScreen(
                                 // Dose Times & Status row
                                 Text(
                                     text = if (language == AppLanguage.BANGLA) "আজকের ডোজের সময়সূচী:" else "Today's Dose Schedule:",
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 11.sp
+                                    ),
+                                    color = DeepPink
                                 )
 
                                 Spacer(modifier = Modifier.height(6.dp))
@@ -358,10 +420,13 @@ fun MedicineAndStockScreen(
                                                     modifier = Modifier.size(16.dp)
                                                 )
                                             },
+                                            shape = RoundedCornerShape(12.dp),
                                             colors = FilterChipDefaults.filterChipColors(
-                                                selectedContainerColor = MaterialTheme.colorScheme.secondary,
-                                                selectedLabelColor = MaterialTheme.colorScheme.onSecondary,
-                                                selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondary
+                                                selectedContainerColor = DeepPink,
+                                                selectedLabelColor = Color.White,
+                                                selectedLeadingIconColor = Color.White,
+                                                containerColor = LightPink.copy(alpha = 0.5f),
+                                                labelColor = PrimaryText
                                             )
                                         )
                                     }
@@ -388,10 +453,12 @@ fun MedicineAndStockScreen(
                 if (isOutOfStock) {
                     item {
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                            shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = WarningRedContainer),
-                            border = BorderStroke(1.5.dp, WarningRed)
+                            border = BorderStroke(1.2.dp, WarningRed.copy(alpha = 0.6f))
                         ) {
                             Row(
                                 modifier = Modifier
@@ -418,7 +485,7 @@ fun MedicineAndStockScreen(
                                         else
                                             "You have run out of sanitary pads! Please restock your inventory immediately.",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = Color(0xFF5C1D1D)
                                     )
                                 }
                             }
@@ -427,10 +494,12 @@ fun MedicineAndStockScreen(
                 } else if (isLowStock) {
                     item {
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                            shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = WarningRedContainer),
-                            border = BorderStroke(1.dp, WarningRed)
+                            border = BorderStroke(1.dp, WarningRed.copy(alpha = 0.5f))
                         ) {
                             Row(
                                 modifier = Modifier
@@ -458,7 +527,7 @@ fun MedicineAndStockScreen(
                                             pads = remainingPads
                                         ),
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = Color(0xFF5C1D1D)
                                     )
                                 }
                             }
@@ -469,10 +538,12 @@ fun MedicineAndStockScreen(
                 // Big Stock Visual Card
                 item {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(24.dp), spotColor = CardSoftShadowColor),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, CardBorderColor)
                     ) {
                         Column(
                             modifier = Modifier
@@ -480,31 +551,47 @@ fun MedicineAndStockScreen(
                                 .padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = "🧻",
-                                fontSize = 56.sp
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(CircleShape)
+                                    .background(LightPink),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "🧻",
+                                    fontSize = 40.sp
+                                )
+                            }
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(14.dp))
 
                             if (isOutOfStock) {
                                 Text(
                                     text = HerCareStrings.outOfStock(language),
-                                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                                    style = MaterialTheme.typography.headlineMedium.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        letterSpacing = (-0.3).sp
+                                    ),
                                     color = WarningRed
                                 )
                             } else {
                                 Text(
                                     text = HerCareStrings.remainingPads(language, remainingPads),
-                                    style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
-                                    color = if (remainingPads <= 3) WarningRed else MaterialTheme.colorScheme.primary
+                                    style = MaterialTheme.typography.displaySmall.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        letterSpacing = (-0.5).sp
+                                    ),
+                                    color = if (remainingPads <= 3) WarningRed else DeepPink
                                 )
                             }
+
+                            Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
                                 text = if (language == AppLanguage.BANGLA) "বর্তমানে মজুত রয়েছে" else "Available in your inventory",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = SecondaryText
                             )
 
                             Spacer(modifier = Modifier.height(20.dp))
@@ -517,7 +604,7 @@ fun MedicineAndStockScreen(
                                         .fillMaxWidth()
                                         .height(48.dp)
                                         .testTag("restock_pads_button"),
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(16.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = WarningRed)
                                 ) {
                                     Text(
@@ -537,14 +624,16 @@ fun MedicineAndStockScreen(
                                             .weight(1f)
                                             .height(48.dp)
                                             .testTag("consume_pad_button"),
-                                        shape = RoundedCornerShape(12.dp),
+                                        shape = RoundedCornerShape(16.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = DeepPink),
                                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                                     ) {
                                         Text(
                                             text = HerCareStrings.logPadUsed(language),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
-                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
                                         )
                                     }
 
@@ -554,14 +643,17 @@ fun MedicineAndStockScreen(
                                             .weight(1f)
                                             .height(48.dp)
                                             .testTag("adjust_stock_button"),
-                                        shape = RoundedCornerShape(12.dp),
+                                        shape = RoundedCornerShape(16.dp),
+                                        border = BorderStroke(1.2.dp, DeepPink),
+                                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DeepPink),
                                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                                     ) {
                                         Text(
                                             text = HerCareStrings.restockButton(language),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
-                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = DeepPink
                                         )
                                     }
                                 }
@@ -573,17 +665,37 @@ fun MedicineAndStockScreen(
                 // How Pad Stock Notification Rule Works
                 item {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(elevation = 1.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, CardBorderColor)
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = if (language == AppLanguage.BANGLA) "🔔 স্বয়ংক্রিয় প্যাড সতর্কতা নিয়ম" else "🔔 Automatic Pad Alert Rule",
-                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
+                        Column(modifier = Modifier.padding(18.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(LightPink),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.Info,
+                                        contentDescription = "Alert Rule",
+                                        tint = DeepPink,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    text = if (language == AppLanguage.BANGLA) "স্বয়ংক্রিয় প্যাড সতর্কতা নিয়ম" else "Automatic Pad Alert Rule",
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = DeepPink
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
                             Text(
                                 text = if (language == AppLanguage.BANGLA) {
                                     "আপনার পরবর্তী পিরিয়ড যদি ২ দিন বা তার কম সময়ের মধ্যে প্রত্যাশিত হয় এবং অবশিষ্ট প্যাডের সংখ্যা ৩ বা তার চেয়ে কম থাকে, তবে HerCare স্বয়ংক্রিয়ভাবে আপনাকে নতুন প্যাড সংগ্রহ করার জন্য অ্যান্ড্রয়েড লোকাল নোটিফিকেশন পাঠাবে।"
@@ -591,7 +703,7 @@ fun MedicineAndStockScreen(
                                     "If your expected period is 2 days away or less and remaining pads are 3 or fewer, HerCare triggers a reliable local Android notification reminding you to purchase pads in advance."
                                 },
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = SecondaryText,
                                 lineHeight = 20.sp
                             )
                         }

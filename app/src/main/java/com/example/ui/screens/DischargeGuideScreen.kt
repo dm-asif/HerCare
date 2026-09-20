@@ -49,10 +49,23 @@ import com.example.ui.theme.FertileGreenContainer
 import com.example.ui.theme.WarningRed
 import com.example.ui.theme.WarningRedContainer
 
+import androidx.compose.ui.draw.shadow
+import com.example.ui.theme.CardBorderColor
+import com.example.ui.theme.CardSoftShadowColor
+import com.example.ui.theme.DeepPink
+import com.example.ui.theme.LightPink
+import com.example.ui.theme.PrimaryPink
+import com.example.ui.theme.PrimaryText
+import com.example.ui.theme.SecondaryText
+
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.IconButton
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DischargeGuideScreen(
     language: AppLanguage,
+    onBackToHome: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // Interactive Symptom Checker States
@@ -69,31 +82,54 @@ fun DischargeGuideScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = HerCareStrings.dischargeGuideTitle(language),
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = if (language == AppLanguage.BANGLA) "চিকিৎসাগত তথ্য ও যোনিস্রাব বিশ্লেষণ" else "Medically sourced guide on healthy vs. concerning discharge",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(
+                    onClick = onBackToHome,
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back to Home",
+                        tint = DeepPink
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(
+                        text = HerCareStrings.dischargeGuideTitle(language),
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = (-0.3).sp
+                        ),
+                        color = DeepPink
+                    )
+                    Text(
+                        text = if (language == AppLanguage.BANGLA) "চিকিৎসাগত তথ্য ও যোনিস্রাব বিশ্লেষণ" else "Medically sourced guide on healthy vs. concerning discharge",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = SecondaryText
+                    )
+                }
+            }
         }
 
         // 1. Normal & Healthy Discharge Section
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = FertileGreenContainer.copy(alpha = 0.5f)),
-                border = BorderStroke(1.dp, FertileGreen.copy(alpha = 0.4f))
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = FertileGreenContainer.copy(alpha = 0.35f)),
+                border = BorderStroke(1.dp, FertileGreen.copy(alpha = 0.3f))
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -148,10 +184,12 @@ fun DischargeGuideScreen(
         // 2. 🔴 CLEAR DOCTOR WARNING FOR CONCERNING DISCHARGE (Mandatory Feature 4)
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(containerColor = WarningRedContainer),
-                border = BorderStroke(1.5.dp, WarningRed)
+                border = BorderStroke(1.2.dp, WarningRed.copy(alpha = 0.6f))
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -191,18 +229,18 @@ fun DischargeGuideScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(14.dp))
                             .background(WarningRed.copy(alpha = 0.1f))
-                            .padding(10.dp),
+                            .padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             Icons.Default.LocalHospital,
                             contentDescription = "Hospital",
                             tint = WarningRed,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(20.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = if (language == AppLanguage.BANGLA) "চিকিৎসকের পরামর্শ গ্রহণ করুন: সঠিক ল্যাব টেস্ট ও সঠিক প্রেসক্রিপশনের জন্য বিশেষজ্ঞ ডাক্তার দেখান।" else "Consult a Doctor: Only a licensed gynecologist can diagnose and treat infections properly.",
                             style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -216,23 +254,34 @@ fun DischargeGuideScreen(
         // 3. Interactive Discharge Self-Assessment
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, CardBorderColor)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.MedicalServices,
-                            contentDescription = "Assessment",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .clip(CircleShape)
+                                .background(LightPink),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.MedicalServices,
+                                contentDescription = "Assessment",
+                                tint = DeepPink,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = HerCareStrings.dischargeSymptomChecker(language),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
+                            color = DeepPink
                         )
                     }
 

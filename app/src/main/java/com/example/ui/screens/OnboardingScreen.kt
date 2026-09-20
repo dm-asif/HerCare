@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import android.app.DatePickerDialog
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -32,6 +34,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -55,6 +61,14 @@ import androidx.compose.ui.unit.sp
 import com.example.R
 import com.example.localization.AppLanguage
 import com.example.localization.HerCareStrings
+import com.example.ui.components.HerCareBackground
+import com.example.ui.theme.CardBorderColor
+import com.example.ui.theme.CardSoftShadowColor
+import com.example.ui.theme.DeepPink
+import com.example.ui.theme.LightPink
+import com.example.ui.theme.PrimaryPink
+import com.example.ui.theme.PrimaryText
+import com.example.ui.theme.SecondaryText
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -106,105 +120,126 @@ fun OnboardingScreen(
         if (selectedLang == AppLanguage.BANGLA) Locale("bn") else Locale.ENGLISH
     )
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Official HerCare Logo Branding
-        Box(
+    HerCareBackground(modifier = modifier) {
+        Column(
             modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.hercare_icon),
-                contentDescription = "HerCare Official Logo",
-                modifier = Modifier.size(88.dp),
-                contentScale = ContentScale.Fit
-            )
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Text(
-            text = HerCareStrings.welcomeTitle(selectedLang),
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.5.sp
-            ),
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = HerCareStrings.onboardingSubtitle(selectedLang),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Language Choice Section
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = HerCareStrings.chooseLanguage(selectedLang),
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+            // Official HerCare Logo Branding
+            Surface(
+                modifier = Modifier
+                    .size(88.dp)
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(26.dp),
+                color = Color.White,
+                border = BorderStroke(1.dp, CardBorderColor)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.hercare_icon),
+                    contentDescription = "HerCare Official Logo",
+                    modifier = Modifier
+                        .size(88.dp)
+                        .clip(RoundedCornerShape(26.dp)),
+                    contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    FilterChip(
-                        selected = selectedLang == AppLanguage.ENGLISH,
-                        onClick = {
-                            selectedLang = AppLanguage.ENGLISH
-                            onLanguageChange(AppLanguage.ENGLISH)
-                        },
-                        label = { Text("English") },
-                        modifier = Modifier.weight(1f)
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Text(
+                text = HerCareStrings.welcomeTitle(selectedLang),
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = (-0.5).sp
+                ),
+                color = DeepPink,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                text = HerCareStrings.onboardingSubtitle(selectedLang),
+                style = MaterialTheme.typography.bodyMedium,
+                color = SecondaryText,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Language Choice Section
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(20.dp),
+                color = Color.White.copy(alpha = 0.95f),
+                border = BorderStroke(1.dp, CardBorderColor)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = HerCareStrings.chooseLanguage(selectedLang),
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = PrimaryText
                     )
-                    FilterChip(
-                        selected = selectedLang == AppLanguage.BANGLA,
-                        onClick = {
-                            selectedLang = AppLanguage.BANGLA
-                            onLanguageChange(AppLanguage.BANGLA)
-                        },
-                        label = { Text("বাংলা") },
-                        modifier = Modifier.weight(1f)
-                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        FilterChip(
+                            selected = selectedLang == AppLanguage.ENGLISH,
+                            onClick = {
+                                selectedLang = AppLanguage.ENGLISH
+                                onLanguageChange(AppLanguage.ENGLISH)
+                            },
+                            label = { Text("English", fontWeight = FontWeight.SemiBold) },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = LightPink,
+                                selectedLabelColor = DeepPink
+                            ),
+                            border = BorderStroke(1.dp, if (selectedLang == AppLanguage.ENGLISH) DeepPink else CardBorderColor),
+                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier.weight(1f)
+                        )
+                        FilterChip(
+                            selected = selectedLang == AppLanguage.BANGLA,
+                            onClick = {
+                                selectedLang = AppLanguage.BANGLA
+                                onLanguageChange(AppLanguage.BANGLA)
+                            },
+                            label = { Text("বাংলা", fontWeight = FontWeight.SemiBold) },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = LightPink,
+                                selectedLabelColor = DeepPink
+                            ),
+                            border = BorderStroke(1.dp, if (selectedLang == AppLanguage.BANGLA) DeepPink else CardBorderColor),
+                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
             }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Profile Form
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+            shape = RoundedCornerShape(22.dp),
+            color = Color.White.copy(alpha = 0.95f),
+            border = BorderStroke(1.dp, CardBorderColor)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(18.dp)
             ) {
                 // 1. Name
                 OutlinedTextField(
@@ -225,24 +260,24 @@ fun OnboardingScreen(
                         }
                     },
                     leadingIcon = {
-                        Icon(Icons.Default.Female, contentDescription = "Name")
+                        Icon(Icons.Default.Female, contentDescription = "Name", tint = DeepPink)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("name_input"),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(14.dp),
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 // 2. Date of Birth
                 Text(
                     text = HerCareStrings.dateOfBirth(selectedLang),
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = PrimaryText
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 OutlinedButton(
                     onClick = {
                         val cal = Calendar.getInstance().apply { timeInMillis = birthDateMillis }
@@ -261,15 +296,17 @@ fun OnboardingScreen(
                         ).show()
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    border = BorderStroke(1.dp, CardBorderColor)
                 ) {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = "DOB")
+                    Icon(Icons.Default.CalendarMonth, contentDescription = "DOB", tint = DeepPink)
                     Spacer(modifier = Modifier.width(8.dp))
                     val age = ((System.currentTimeMillis() - birthDateMillis) / (365.25 * 24 * 60 * 60 * 1000L)).toInt()
                     Text(
                         text = "${dateFormat.format(Date(birthDateMillis))} " +
                                 if (selectedLang == AppLanguage.BANGLA) "($age বছর)" else "($age yrs)",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = PrimaryText
                     )
                 }
 
@@ -278,13 +315,13 @@ fun OnboardingScreen(
                 // 3. Last Period Start Date (Includes Historical Dates)
                 Text(
                     text = HerCareStrings.lastPeriodStartDate(selectedLang),
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = PrimaryText
                 )
                 Text(
                     text = HerCareStrings.selectOlderDateHint(selectedLang),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = SecondaryText
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 OutlinedButton(
@@ -302,20 +339,21 @@ fun OnboardingScreen(
                             cal.get(Calendar.MONTH),
                             cal.get(Calendar.DAY_OF_MONTH)
                         ).apply {
-                            // Can select any historical date up to today
                             datePicker.maxDate = System.currentTimeMillis()
                         }.show()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("last_period_picker_button"),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    border = BorderStroke(1.dp, CardBorderColor)
                 ) {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = "Last Period Date")
+                    Icon(Icons.Default.CalendarMonth, contentDescription = "Last Period Date", tint = DeepPink)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = dateFormat.format(Date(lastPeriodStartMillis)),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        color = PrimaryText
                     )
                 }
 
@@ -329,28 +367,34 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = HerCareStrings.averageCycleLength(selectedLang),
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = PrimaryText
                     )
                     Text(
                         text = if (selectedLang == AppLanguage.BANGLA) "${cycleLength.toInt()} দিন" else "${cycleLength.toInt()} days",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = DeepPink
                     )
                 }
                 Text(
                     text = HerCareStrings.cycleLengthHint(selectedLang),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = SecondaryText
                 )
                 Slider(
                     value = cycleLength,
                     onValueChange = { cycleLength = it },
                     valueRange = 21f..35f,
                     steps = 13,
+                    colors = SliderDefaults.colors(
+                        thumbColor = DeepPink,
+                        activeTrackColor = PrimaryPink,
+                        inactiveTrackColor = LightPink
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 // 5. Average Period Duration (2 to 7 days standard)
                 Row(
@@ -360,28 +404,34 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = HerCareStrings.averagePeriodDuration(selectedLang),
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = PrimaryText
                     )
                     Text(
                         text = if (selectedLang == AppLanguage.BANGLA) "${periodDuration.toInt()} দিন" else "${periodDuration.toInt()} days",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = DeepPink
                     )
                 }
                 Text(
                     text = HerCareStrings.periodDurationHint(selectedLang),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = SecondaryText
                 )
                 Slider(
                     value = periodDuration,
                     onValueChange = { periodDuration = it },
                     valueRange = 2f..7f,
                     steps = 4,
+                    colors = SliderDefaults.colors(
+                        thumbColor = DeepPink,
+                        activeTrackColor = PrimaryPink,
+                        inactiveTrackColor = LightPink
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 // 6. Starting Pad Stock
                 Row(
@@ -391,12 +441,13 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = HerCareStrings.initialPadsCount(selectedLang),
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = PrimaryText
                     )
                     Text(
                         text = if (selectedLang == AppLanguage.BANGLA) "$initialPads টি" else "$initialPads pads",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = DeepPink
                     )
                 }
                 Slider(
@@ -404,6 +455,11 @@ fun OnboardingScreen(
                     onValueChange = { initialPads = it.toInt() },
                     valueRange = 0f..40f,
                     steps = 39,
+                    colors = SliderDefaults.colors(
+                        thumbColor = DeepPink,
+                        activeTrackColor = PrimaryPink,
+                        inactiveTrackColor = LightPink
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -431,11 +487,13 @@ fun OnboardingScreen(
                 .fillMaxWidth()
                 .height(54.dp)
                 .testTag("get_started_button"),
-            shape = RoundedCornerShape(16.dp)
+            colors = ButtonDefaults.buttonColors(containerColor = DeepPink),
+            shape = RoundedCornerShape(20.dp)
         ) {
             Text(
                 text = HerCareStrings.getStarted(selectedLang),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
             )
         }
 
@@ -448,18 +506,19 @@ fun OnboardingScreen(
             Icon(
                 Icons.Default.Info,
                 contentDescription = "Privacy",
-                tint = MaterialTheme.colorScheme.outline,
+                tint = SecondaryText,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = if (selectedLang == AppLanguage.BANGLA) "আপনার স্বাস্থ্য তথ্য সম্পূর্ণ নিরাপদ এবং আপনার ফোনেই সংরক্ষিত থাকে।" else "Your sensitive health data stays strictly private on your device.",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.outline,
+                color = SecondaryText,
                 textAlign = TextAlign.Center
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
     }
+}
 }

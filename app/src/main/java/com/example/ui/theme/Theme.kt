@@ -8,69 +8,39 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = TealPrimaryDark,
-    onPrimary = TealOnPrimaryDark,
-    primaryContainer = TealPrimaryContainerDark,
-    onPrimaryContainer = TealOnPrimaryContainerDark,
-    secondary = EmeraldSecondaryDark,
-    onSecondary = EmeraldOnSecondaryDark,
-    secondaryContainer = EmeraldSecondaryContainerDark,
-    onSecondaryContainer = EmeraldOnSecondaryContainerDark,
-    tertiary = MintTertiaryDark,
-    onTertiary = MintOnTertiaryDark,
-    tertiaryContainer = MintTertiaryContainerDark,
-    onTertiaryContainer = MintOnTertiaryContainerDark,
-    background = NeutralBackgroundDark,
-    surface = NeutralSurfaceDark,
-    surfaceVariant = NeutralSurfaceVariantDark,
-    onBackground = NeutralOnSurfaceDark,
-    onSurface = NeutralOnSurfaceDark,
-    onSurfaceVariant = NeutralOnSurfaceVariantDark,
-    outline = NeutralOutlineDark
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = TealPrimary,
-    onPrimary = TealOnPrimary,
-    primaryContainer = TealPrimaryContainer,
-    onPrimaryContainer = TealOnPrimaryContainer,
-    secondary = EmeraldSecondary,
-    onSecondary = EmeraldOnSecondary,
-    secondaryContainer = EmeraldSecondaryContainer,
-    onSecondaryContainer = EmeraldOnSecondaryContainer,
-    tertiary = MintTertiary,
-    onTertiary = MintOnTertiary,
-    tertiaryContainer = MintTertiaryContainer,
-    onTertiaryContainer = MintOnTertiaryContainer,
-    background = NeutralBackground,
-    surface = NeutralSurface,
-    surfaceVariant = NeutralSurfaceVariant,
-    onBackground = NeutralOnSurface,
-    onSurface = NeutralOnSurface,
-    onSurfaceVariant = NeutralOnSurfaceVariant,
-    outline = NeutralOutline
+private val HerCareColorScheme = lightColorScheme(
+    primary = PrimaryPink,
+    onPrimary = PureWhite,
+    primaryContainer = LightPink,
+    onPrimaryContainer = DeepPink,
+    secondary = RoseAccent,
+    onSecondary = PureWhite,
+    secondaryContainer = LightPink,
+    onSecondaryContainer = PrimaryText,
+    tertiary = SoftPurpleAccent,
+    onTertiary = PureWhite,
+    tertiaryContainer = Color(0xFFF6EEFA),
+    onTertiaryContainer = PrimaryText,
+    background = VeryLightBackground,
+    surface = PureWhite,
+    surfaceVariant = LightPink,
+    onBackground = PrimaryText,
+    onSurface = PrimaryText,
+    onSurfaceVariant = SecondaryText,
+    outline = CardBorderColor
 )
 
 @Composable
 fun HerCareTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Keep consistent brand identity
+    darkTheme: Boolean = false, // Strictly feminine light pink theme as per design specification
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = HerCareColorScheme,
         typography = Typography,
         content = content
     )

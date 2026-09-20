@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +24,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocalHospital
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -40,6 +43,16 @@ import androidx.compose.ui.unit.sp
 import com.example.localization.AppLanguage
 import com.example.localization.HerCareStrings
 import com.example.ui.components.IrregularWarningCard
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.draw.shadow
+import com.example.ui.theme.CardBorderColor
+import com.example.ui.theme.CardSoftShadowColor
+import com.example.ui.theme.DeepPink
+import com.example.ui.theme.LightPink
+import com.example.ui.theme.PrimaryPink
+import com.example.ui.theme.PrimaryText
+import com.example.ui.theme.SecondaryText
+import com.example.ui.theme.SoftRose
 import com.example.ui.theme.CoralPeriod
 import com.example.ui.theme.FertileGreen
 import com.example.ui.theme.WarningRed
@@ -80,27 +93,30 @@ fun HealthReportScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.Transparent)
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
+                Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                     Text(
                         text = HerCareStrings.healthReportTitle(language),
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = (-0.3).sp
+                        ),
+                        color = DeepPink
                     )
                     Text(
                         text = if (language == AppLanguage.BANGLA) "নথিভুক্ত উপাত্ত ও চক্রের বিশ্লেষণ" else "Aggregated insights from your personal cycle logs",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = SecondaryText
                     )
                 }
 
@@ -128,12 +144,26 @@ fun HealthReportScreen(
                         }
                         context.startActivity(Intent.createChooser(sendIntent, "Share with Doctor"))
                     },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.testTag("share_report_button")
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = DeepPink),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 44.dp)
+                        .testTag("share_report_button")
                 ) {
-                    Icon(Icons.Default.Share, contentDescription = "Share", modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(if (language == AppLanguage.BANGLA) "শেয়ার" else "Share")
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        modifier = Modifier.size(18.dp),
+                        tint = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (language == AppLanguage.BANGLA) "শেয়ার" else "Share",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                        color = Color.White,
+                        maxLines = 1
+                    )
                 }
             }
         }
@@ -151,16 +181,18 @@ fun HealthReportScreen(
         // Key Cycle Metrics Card
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, CardBorderColor)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text(
                         text = if (language == AppLanguage.BANGLA) "চক্রের মূল পরিসংখ্যান" else "Primary Cycle Metrics",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = DeepPink
                     )
 
                     Spacer(modifier = Modifier.height(14.dp))
@@ -173,14 +205,14 @@ fun HealthReportScreen(
                             title = if (language == AppLanguage.BANGLA) "গড় সাইকেল" else "Avg Cycle",
                             value = "${summary?.averageCycleLength ?: 28} " + if (language == AppLanguage.BANGLA) "দিন" else "days",
                             subtext = if (language == AppLanguage.BANGLA) "স্বাভাবিক: ২১–৩৫ দিন" else "Normal: 21–35 days",
-                            color = MaterialTheme.colorScheme.primary
+                            color = DeepPink
                         )
 
                         MetricBox(
                             title = if (language == AppLanguage.BANGLA) "গড় পিরিয়ড" else "Avg Period",
                             value = "${summary?.averagePeriodDuration ?: 5} " + if (language == AppLanguage.BANGLA) "দিন" else "days",
                             subtext = if (language == AppLanguage.BANGLA) "স্বাভাবিক: ২–৭ দিন" else "Normal: 2–7 days",
-                            color = CoralPeriod
+                            color = PrimaryPink
                         )
 
                         MetricBox(
@@ -201,15 +233,18 @@ fun HealthReportScreen(
         // Symptoms Summary Card
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, CardBorderColor)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text(
                         text = if (language == AppLanguage.BANGLA) "উপসর্গের পুনরাবৃত্তি (Symptoms Summary)" else "Symptoms & PMS Frequency",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = DeepPink
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -218,24 +253,35 @@ fun HealthReportScreen(
                         Text(
                             text = if (language == AppLanguage.BANGLA) "এখনো কোনো উপসর্গ নথিভুক্ত করা হয়নি।" else "No symptoms logged yet. Use 'Log Today' to track patterns.",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = SecondaryText
                         )
                     } else {
                         symptomFrequencies.entries.sortedByDescending { it.value }.take(5).forEach { (sym, count) ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                    .padding(vertical = 5.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = sym,
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
-                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(8.dp)
+                                            .clip(CircleShape)
+                                            .background(DeepPink)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = sym,
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                                        color = PrimaryText
+                                    )
+                                }
                                 Text(
                                     text = if (language == AppLanguage.BANGLA) "$count বার" else "$count times",
                                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = DeepPink
                                 )
                             }
                         }
@@ -247,25 +293,28 @@ fun HealthReportScreen(
         // Doctor Consultation Recommendation Card
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f))
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 1.dp, shape = RoundedCornerShape(22.dp), spotColor = CardSoftShadowColor),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = LightPink.copy(alpha = 0.4f)),
+                border = BorderStroke(1.dp, SoftRose.copy(alpha = 0.5f))
             ) {
                 Row(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(18.dp),
                     verticalAlignment = Alignment.Top
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(38.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
+                            .background(DeepPink.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             Icons.Default.LocalHospital,
                             contentDescription = "Doctor Advice",
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = DeepPink,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -276,7 +325,7 @@ fun HealthReportScreen(
                         Text(
                             text = if (language == AppLanguage.BANGLA) "চিকিৎসকের সাথে পরামর্শের গাইড" else "When to Consult a Healthcare Professional",
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
+                            color = DeepPink
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -286,7 +335,7 @@ fun HealthReportScreen(
                                 "If cycles consistently fall outside 21–35 days for over 3 months, bleeding extends beyond 7 days, or severe pelvic cramps occur, share these recorded trends with a gynecologist."
                             },
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = PrimaryText,
                             lineHeight = 20.sp
                         )
                     }
@@ -305,14 +354,14 @@ fun HealthReportScreen(
                 Icon(
                     Icons.Default.Info,
                     contentDescription = "Info",
-                    tint = MaterialTheme.colorScheme.outline,
+                    tint = SecondaryText,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = HerCareStrings.nonDiagnosisDisclaimer(language),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
+                    color = SecondaryText
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -325,27 +374,27 @@ private fun MetricBox(title: String, value: String, subtext: String, color: Colo
     Column(
         modifier = Modifier
             .width(100.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(color.copy(alpha = 0.1f))
+            .clip(RoundedCornerShape(16.dp))
+            .background(color.copy(alpha = 0.08f))
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = SecondaryText
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = value,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
             color = color
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = subtext,
             style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = SecondaryText
         )
     }
 }

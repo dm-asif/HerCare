@@ -10,12 +10,33 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.security.BiometricHelper
@@ -54,8 +75,60 @@ class MainActivity : FragmentActivity() {
             }
 
             HerCareTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
                     when {
+                        // 0. State still loading from Room DB - show branded splash to prevent flashing onboarding
+                        !uiState.isLoaded -> {
+                            com.example.ui.components.HerCareBackground {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        androidx.compose.material3.Surface(
+                                            modifier = Modifier
+                                                .size(100.dp)
+                                                .shadow(elevation = 6.dp, shape = RoundedCornerShape(28.dp), spotColor = com.example.ui.theme.CardSoftShadowColor),
+                                            shape = RoundedCornerShape(28.dp),
+                                            color = Color.White,
+                                            border = androidx.compose.foundation.BorderStroke(1.5.dp, com.example.ui.theme.CardBorderColor)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.hercare_icon),
+                                                contentDescription = "HerCare Logo",
+                                                modifier = Modifier
+                                                    .size(100.dp)
+                                                    .clip(RoundedCornerShape(28.dp)),
+                                                contentScale = ContentScale.Crop
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(20.dp))
+                                        Text(
+                                            text = "HerCare",
+                                            style = MaterialTheme.typography.headlineMedium.copy(
+                                                fontWeight = FontWeight.ExtraBold,
+                                                letterSpacing = (-0.5).sp
+                                            ),
+                                            color = com.example.ui.theme.DeepPink
+                                        )
+                                        Text(
+                                            text = "Your Health • Our Care ♡",
+                                            style = MaterialTheme.typography.bodySmall.copy(
+                                                fontWeight = FontWeight.Medium
+                                            ),
+                                            color = com.example.ui.theme.SecondaryText
+                                        )
+                                        Spacer(modifier = Modifier.height(24.dp))
+                                        CircularProgressIndicator(
+                                            color = com.example.ui.theme.PrimaryPink,
+                                            modifier = Modifier.size(28.dp),
+                                            strokeWidth = 2.5.dp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
                         // App is locked by Biometrics or PIN
                         uiState.isAppLocked -> {
                             BiometricLockScreen(
