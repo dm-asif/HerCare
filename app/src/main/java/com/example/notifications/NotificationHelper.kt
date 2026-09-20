@@ -180,9 +180,23 @@ object NotificationHelper {
         )
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Using setAlarmClock gives the highest reliability on modern Android,
-                // bypassing aggressive manufacturer battery savers and Doze mode.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // On Android 12+ (API 31+), verify exact alarm capability
+                if (alarmManager.canScheduleExactAlarms()) {
+                    val showIntent = Intent(context, MainActivity::class.java)
+                    val showPendingIntent = PendingIntent.getActivity(
+                        context,
+                        requestCode,
+                        showIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                    val alarmClockInfo = AlarmManager.AlarmClockInfo(triggerMillis, showPendingIntent)
+                    alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
+                } else {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // On Android 10 (API 29) & Android 11 (API 30), setAlarmClock works reliably without special permissions
                 val showIntent = Intent(context, MainActivity::class.java)
                 val showPendingIntent = PendingIntent.getActivity(
                     context,

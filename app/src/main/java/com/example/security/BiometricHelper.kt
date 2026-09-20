@@ -1,6 +1,7 @@
 package com.example.security
 
 import android.content.Context
+import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -10,13 +11,21 @@ object BiometricHelper {
 
     fun isBiometricAvailable(context: Context): Boolean {
         val biometricManager = BiometricManager.from(context)
-        return when (biometricManager.canAuthenticate(
-            BiometricManager.Authenticators.BIOMETRIC_STRONG or
-            BiometricManager.Authenticators.BIOMETRIC_WEAK or
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL
-        )) {
-            BiometricManager.BIOMETRIC_SUCCESS -> true
-            else -> false
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            when (biometricManager.canAuthenticate(
+                BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                BiometricManager.Authenticators.BIOMETRIC_WEAK or
+                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+            )) {
+                BiometricManager.BIOMETRIC_SUCCESS -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            when (biometricManager.canAuthenticate()) {
+                BiometricManager.BIOMETRIC_SUCCESS -> true
+                else -> false
+            }
         }
     }
 
@@ -28,15 +37,22 @@ object BiometricHelper {
         onError: (String) -> Unit
     ) {
         val executor = ContextCompat.getMainExecutor(activity)
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        val promptBuilder = BiometricPrompt.PromptInfo.Builder()
             .setTitle(title)
             .setSubtitle(subtitle)
-            .setAllowedAuthenticators(
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            promptBuilder.setAllowedAuthenticators(
                 BiometricManager.Authenticators.BIOMETRIC_STRONG or
                 BiometricManager.Authenticators.BIOMETRIC_WEAK or
                 BiometricManager.Authenticators.DEVICE_CREDENTIAL
             )
-            .build()
+        } else {
+            @Suppress("DEPRECATION")
+            promptBuilder.setDeviceCredentialAllowed(true)
+        }
+
+        val promptInfo = promptBuilder.build()
 
         val biometricPrompt = BiometricPrompt(
             activity,
