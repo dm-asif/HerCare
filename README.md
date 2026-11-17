@@ -33,15 +33,28 @@ Cycle dates, fertile-window estimates, and health notices are informational esti
 
 ## Download and install
 
-The repository includes a debug APK at [`public/HerCare.apk`](public/HerCare.apk) (about 28 MB).
+The repository includes a debug APK at [public/HerCare.apk](public/HerCare.apk) (about 28 MB).
 
 [**Download HerCare.apk**](https://github.com/dm-asif/HerCare/raw/refs/heads/main/public/HerCare.apk)
 
 The APK targets Android 10 (API 29) and later. After downloading it on an Android device, open the APK and follow the system prompts to install it. Android may ask you to allow installation from the app used to download the file.
 
-## Screenshots and artwork
+## Screenshots
 
-There are no full in-app screenshots in the repository yet. The screenshot test captures only the app name, not a representative screen, so it is not presented as a product screenshot here. The project does include these genuine app artwork assets:
+<table align="center">
+  <tr>
+    <td align="center" width="50%"><strong>Home</strong><br /><img src="docs/screenshots/home.jpg" alt="HerCare home screen" width="280" /></td>
+    <td align="center" width="50%"><strong>Cycle history</strong><br /><img src="docs/screenshots/cycle-history.jpg" alt="Cycle history screen" width="280" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><strong>Health report</strong><br /><img src="docs/screenshots/health-report.jpg" alt="Health report screen" width="280" /></td>
+    <td align="center" width="50%"><strong>Medicine routine</strong><br /><img src="docs/screenshots/medicine-routine.jpg" alt="Medicine routine screen" width="280" /></td>
+  </tr>
+</table>
+
+*Personal identifiers and cycle-specific values are blurred for privacy.*
+
+## App artwork
 
 <p align="center">
   <img src="app/src/main/res/drawable/new_hercare_logo.jpg" alt="HerCare logo artwork" width="220" />
@@ -97,7 +110,7 @@ The repository also provides `./build_apk.sh`, which prepares the local build en
 
 ## Automated builds
 
-The workflow in [`.github/workflows/android_build.yml`](.github/workflows/android_build.yml) runs for pushes, pull requests, and manual dispatches. It builds a debug APK and uploads it as the `HerCare-Android-APK` Actions artifact. For pushes and manual runs, the workflow also attempts to publish the APK in a GitHub Release.
+The workflow in [.github/workflows/android_build.yml](.github/workflows/android_build.yml) runs for pushes, pull requests, and manual dispatches. It builds a debug APK and uploads it as the `HerCare-Android-APK` Actions artifact. For pushes and manual runs, the workflow also attempts to publish the APK in a GitHub Release.
 
 ## Medical notice
 
